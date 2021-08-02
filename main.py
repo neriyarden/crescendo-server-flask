@@ -1,21 +1,57 @@
+import json
 import os
 import mongodb.mongo_setup as mongo_setup
 from flask import Flask
 from flask_httpauth import HTTPBasicAuth
-from flask_restful import Api, Resource, abort, reqparse
 from werkzeug.security import check_password_hash, generate_password_hash
 from mongodb.models.users import User
-from mongodb.initial_data.tags import insert_dummydata
 from env import config_env_vars
+from datetime import datetime
 
 app = Flask(__name__)
-api = Api(app)
 
 
 with app.app_context():
     config_env_vars()
     mongo_setup.global_init()
-    insert_dummydata()
+
+
+@app.route('/artists')
+def getArtists():
+    artists = User.get_all_artists()
+    return artists.to_json()
+
+
+@app.route('/artists/<string:artist_id>')
+def getArtist(artist_id):
+    artist = User.get_artist_by_id(artist_id)
+    return artist.to_json()
+
+
+if __name__ == '__main__':
+    app.run(port=5000, debug=True) # turn off debug for production
+
+# password_hash = generate_password_hash("ny123456!")
+
+# auth = HTTPBasicAuth()
+# app.config['PASSWORD_HASH'] = os.environ.get('PASSWORD_HASH', password_hash)
+
+# @auth.verify_password
+# def verify_password(username, password):
+#     return check_password_hash(app.config['PASSWORD_HASH'], password)
+
+# @auth.error_handler
+# def unauthorized():
+#     return jsonify(error='unauthorized access'), 403
+
+# @app.route('/signin')
+# @auth.login_required
+# def hello():
+#     return "Hello World!"
+
+
+
+
 
 # artist_data = reqparse.RequestParser()
 
@@ -36,7 +72,16 @@ with app.app_context():
 # )
 # artist_data.add_argument(
 #     'link_to_youtube', type=str, help='Link to artist youtube'
-#     )
+# )
+
+# class Artists(Resource):
+#     def get(self):
+#         """Get all artists data"""
+#         args = artist_data.parse_args()
+#         return args
+
+# api.add_resource(Artists, '/artists')
+
 
 
 # class Artist(Resource):
@@ -65,44 +110,9 @@ with app.app_context():
 # api.add_resource(Artist, '/artist/<string:artist_id>')
 
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
 
 
 
 
 
-# client = pymongo.MongoClient("mongodb+srv://neri:nerisql502@cluster0.kvp12.mongodb.net/Crescendo?retryWrites=true&w=majority")
 
-# db = client['Crescendo']
-
-# artists = db["artists"]
-
-# riki = { "name": "Rikimaru Gohda", "age": 27, "clan": "Azuma"}
-
-# result = artists.insert_one(riki)
-
-# print('---------------------------------')
-# print(db.list_collection_names())
-
-
-# password_hash = generate_password_hash("ny123456!")
-
-# auth = HTTPBasicAuth()
-# app.config['PASSWORD_HASH'] = os.environ.get('PASSWORD_HASH', password_hash)
-
-# @auth.verify_password
-# def verify_password(username, password):
-#     return check_password_hash(app.config['PASSWORD_HASH'], password)
-
-# @auth.error_handler
-# def unauthorized():
-#     return jsonify(error='unauthorized access'), 403
-
-# @app.route('/signin')
-# @auth.login_required
-# def hello():
-#     return "Hello World!"
-
-
-# app.run(port=5000, debug=True)
