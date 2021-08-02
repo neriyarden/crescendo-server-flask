@@ -4,8 +4,6 @@ from mongodb.models.tags import Tag
 
 """Dummy data for the db"""
 
-# mongo_setup.global_init()
-
 def insert_dummydata():
     Tag.create_tag('Solo')
     Tag.create_tag('Acoustic')

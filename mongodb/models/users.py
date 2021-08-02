@@ -21,6 +21,16 @@ class User(me.Document):
         user.save()
         return user
 
+    @classmethod
+    def get_all_artists(cls):
+        artists = cls.objects()
+        return artists
+
+    @classmethod
+    def get_artist_by_id(cls, id):
+        artist = cls.objects(id=id)
+        return artist
+
     meta = {
         'collection': 'users',
         'indexes': [('name','email')],

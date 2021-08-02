@@ -3,9 +3,9 @@ import mongoengine as me
 
 
 class Event(me.Document):
-    artist_id = me.ReferenceField('User')
+    artist_id = me.ReferenceField('User', DBRef=True)
     tour = me.StringField(max_length=50, required=True)
-    datetime = me.DateTimeField(default=datetime.datetime.utcnow)
+    datetime = me.DateTimeField()
     duration = me.IntField(min_value=20)
     venue = me.StringField(max_length=50, required=True)
     city = me.StringField(max_length=50, required=True)
@@ -21,8 +21,7 @@ class Event(me.Document):
     @classmethod
     def create_event(
             cls,
-            artist,
-            datetime,
+            artist_id,
             duration,
             venue,
             city,
@@ -30,6 +29,7 @@ class Event(me.Document):
             description,
             img_url,
             ticketseller_url,
+            datetime,
             sold_out = False,
             came_from_request_id = False,
             tags = [],
@@ -37,15 +37,24 @@ class Event(me.Document):
             deleted = False,
             ):
         """"""
-        request = cls()
-        request.artist = artist
-        request.datetime = datetime
-        request.duration = duration
-        request.city = city
-        request.cap = cap
-        request.save()
-        return request
+        event = cls()
+        event.artist_id = artist_id
+        event.duration = duration
+        event.venue = venue
+        event.city = city
+        event.tour = tour
+        event.description = description
+        event.img_url = img_url
+        event.ticketseller_url = ticketseller_url
+        event.sold_out = sold_out
+        event.came_from_request_id = came_from_request_id
+        event.datetime = datetime
+        event.tags = tags
+        event.featured = featured
+        event.deleted = deleted
+        event.save()
+        return event
 
     meta = {
-        'collection': 'events'
+        'collection': 'events',
     }
