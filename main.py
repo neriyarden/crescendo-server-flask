@@ -1,7 +1,7 @@
 import json
 import os
 import mongodb.mongo_setup as mongo_setup
-from flask import Flask
+from flask import Flask, request
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import check_password_hash, generate_password_hash
 from mongodb.models.users import User
@@ -18,7 +18,11 @@ with app.app_context():
 
 @app.route('/artists')
 def getArtists():
-    artists = User.get_all_artists()
+    size = request.args.get('size') or 25
+    page_num = request.args.get('pageNum') or 0
+    starts_with = request.args.get('startsWith') or ''
+    search_term = request.args.get('searchTerm') or ''
+    artists = User.get_all_artists(size, page_num, starts_with, search_term)
     return artists.to_json()
 
 

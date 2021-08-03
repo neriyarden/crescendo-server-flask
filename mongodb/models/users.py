@@ -1,4 +1,5 @@
 import datetime
+from os import startfile
 import mongoengine as me
 
 
@@ -22,8 +23,11 @@ class User(me.Document):
         return user
 
     @classmethod
-    def get_all_artists(cls):
-        artists = cls.objects()
+    def get_all_artists(cls, size, page_num, starts_with, search_term):
+        artists = cls.objects[int(page_num):int(size)].filter(
+            name__istartswith=starts_with, name__icontains=search_term
+            )
+        
         return artists
 
     @classmethod
