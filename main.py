@@ -1,23 +1,34 @@
 from datetime import datetime
 
 from flask import Flask
+from flask_cors import CORS
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask.helpers import send_from_directory
+
 
 import mongodb.mongo_setup as mongo_setup
 from env import config_env_vars
 from mongodb.initial_data.users import insert_dummydata
 from routes.artists import Artists
 
-app = Flask(__name__)
 
+app = Flask(__name__)
+app.register_blueprint(Artists)
+# cors = CORS(app, supports_credentials=True, resources={
+            # r"/api/*": {"origins": "http://localhost:3000"}})
+# app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app)
 
 with app.app_context():
     config_env_vars()
     mongo_setup.global_init()
-    insert_dummydata()
+    # insert_dummydata()
 
-# app.register_blueprint(Artists)
+@app.route('/img/<routeName>/<fileName>')
+def get_file(fileName, routeName):
+    return send_from_directory(f'img/{routeName}', fileName)
+
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True) # turn off debug for production
@@ -27,7 +38,7 @@ if __name__ == '__main__':
 
 
 # @app.route('/artists')
-# def getArtists():
+# def get_artists():
 #     size        = request.args.get('size') or 25
 #     page_num    = request.args.get('pageNum') or 0
 #     starts_with = request.args.get('startsWith') or ''
@@ -38,7 +49,7 @@ if __name__ == '__main__':
 
 
 # @app.route('/artists/<string:artist_id>')
-# def getArtist(artist_id):
+# def get_artist(artist_id):
 #     artist = User.get_artist_by_id(artist_id)
 #     return artist.to_json()
 

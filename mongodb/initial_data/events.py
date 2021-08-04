@@ -29,7 +29,7 @@ def insert_dummydata():
         venue='Zappa Haifa',
         city='Haifa',
         description='wow amazing cool',
-        img_url='/img/events/live1.jpg',
+        img_url='img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
         datetime=datetime(2021, 7, 4, hour=23),
         tags=[solo, loud, accessible, standing]
@@ -41,7 +41,7 @@ def insert_dummydata():
         venue='Barby',
         city='Tel Aviv',
         description='wow amazing cool',
-        img_url='/img/events/live1.jpg',
+        img_url='img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
         datetime=datetime(2021, 7, 6, hour=22),
         tags=[solo, acoustic, electronic, sitting]
@@ -53,7 +53,7 @@ def insert_dummydata():
         venue='הצוללת הצהובה',
         city='Jerusalem',
         description='wow amazing cool',
-        img_url='/img/events/live1.jpg',
+        img_url='img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
         datetime=datetime(2021, 8, 7, hour=22),
         tags=[full_band, kids, intimate, party]
@@ -67,7 +67,7 @@ def insert_dummydata():
         venue='Zappa Haifa',
         city='Haifa',
         description='wow amazing cool',
-        img_url='/img/events/live2.jpg',
+        img_url='img/events/live2.jpg',
         ticketseller_url='https://www.eventim.co.il/',
         datetime=datetime(2021, 9, 16, hour=22),
         tags=[solo, kids, sitting, party]
@@ -79,7 +79,7 @@ def insert_dummydata():
         venue='Barby',
         city='Tel Aviv',
         description='wow amazing cool',
-        img_url='/img/events/live2.jpg',
+        img_url='img/events/live2.jpg',
         ticketseller_url='https://www.eventim.co.il/',
         datetime=datetime(2021, 7, 25, hour=20),
         tags=[loud, party, adults_only, full_band, standing]

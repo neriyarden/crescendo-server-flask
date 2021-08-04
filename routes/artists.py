@@ -1,5 +1,4 @@
-from flask import request
-from flask import Blueprint
+from flask import request, send_from_directory, Blueprint
 from mongodb.models.users import User
 
 
@@ -8,7 +7,7 @@ Artists = Blueprint('Artists', __name__)
 
 # get artists data with filters
 @Artists.route('/artists', methods=['GET'])
-def getArtists():
+def get_artists():
     size        = request.args.get('size') or 25
     page_num    = request.args.get('pageNum') or 0
     starts_with = request.args.get('startsWith') or ''
@@ -20,9 +19,17 @@ def getArtists():
 
 # get artist data by id
 @Artists.route('/artists/<string:artist_id>', methods=['GET'])
-def getArtist(artist_id):
+def get_artist(artist_id):
     artist = User.get_artist_by_id(artist_id)
     return artist.to_json()
 
 
-# @Artists.route('/artists/<string:artist_id>', methods=['GET'])
+@Artists.route('/artists/', methods=['PATCH'])
+def update_artist():
+    request.file.get('newImg')
+    request.form.get('user_id')
+    request.form.get('link_to_spotify')
+    request.form.get('link_to_instagram')
+    request.form.get('link_to_facebook')
+    request.form.get('link_to_youtube')
+

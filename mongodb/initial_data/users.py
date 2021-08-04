@@ -12,7 +12,7 @@ def insert_dummydata():
         email='joe_m@gmail.com',
         password='jm123456!',
         is_artist=1,
-        img_url='/img/artists/artists2.jpg',
+        img_url='img/artists/artists2.jpg',
         bio="Joe Mayor is an English funk and acid jazz band from London. Formed in 1992, they are fronted by vocalist Jay Kay, and were prominent in the London-based funk and acid jazz movement of the 1990s. The band's output blends their anything-goes approach with aggressive dance rhythms and 1970s influenced sounds. Their later releases drew from rock, disco, electronic and Latin music genres. Lyrically, the group have addressed social and environmental justice. Kay has remained as the only original member through several line-up changes.",
         link_to_spotify="https://open.spotify.com/artist/6J7biCazzYhU3gM9j1wfid?si=lZa0EhCnRIO7FhXDO-Wvkw&dl_branch=1",
         link_to_instagram="https://www.instagram.com/jamiroquaihq/",
