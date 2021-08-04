@@ -6,7 +6,8 @@ from mongodb.models.users import User
 Artists = Blueprint('Artists', __name__)
 
 
-@Artists.route('/artists')
+# get artists data with filters
+@Artists.route('/artists', methods=['GET'])
 def getArtists():
     size        = request.args.get('size') or 25
     page_num    = request.args.get('pageNum') or 0
@@ -17,7 +18,11 @@ def getArtists():
     return artists.to_json()
 
 
-@Artists.route('/artists/<string:artist_id>')
+# get artist data by id
+@Artists.route('/artists/<string:artist_id>', methods=['GET'])
 def getArtist(artist_id):
     artist = User.get_artist_by_id(artist_id)
     return artist.to_json()
+
+
+# @Artists.route('/artists/<string:artist_id>', methods=['GET'])

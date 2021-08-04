@@ -1,4 +1,3 @@
-import mongodb.mongo_setup as mongo_setup
 from mongodb.models.events import Event
 from mongodb.models.users import User
 from datetime import datetime
@@ -6,9 +5,6 @@ from mongodb.models.tags import Tag
 
 
 """Dummy data for the db"""
-
-
-
 
 def insert_dummydata():
     # tags
@@ -24,8 +20,8 @@ def insert_dummydata():
     accessible = Tag.objects(id='6106b98eb94c8b55f3b5e8b7').first()
     electronic = Tag.objects(id='6106b98eb94c8b55f3b5e8b8').first()
     full_band = Tag.objects(id='6106b98eb94c8b55f3b5e8b9').first()
-    joe_mayor = Tag.objects(id='6106ae3b69972d00690ff294').first()
 
+    joe_mayor = User.objects(id='6106ae3b69972d00690ff294').first()
     Event.create_event(
         artist_id=joe_mayor,
         tour='Joe Mayer World Tour',

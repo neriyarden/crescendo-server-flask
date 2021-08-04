@@ -6,7 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 import mongodb.mongo_setup as mongo_setup
 from env import config_env_vars
-from mongodb.initial_data.events import insert_dummydata
+from mongodb.initial_data.users import insert_dummydata
 from routes.artists import Artists
 
 app = Flask(__name__)
