@@ -49,5 +49,3 @@ class Artist(User):
     link_to_instagram = me.StringField(max_length=255)
     link_to_facebook = me.StringField(max_length=255)
     link_to_youtube = me.StringField(max_length=255)
-    events = me.ListField(me.ReferenceField('Event'))
-    requests = me.ListField(me.ReferenceField('Request'))

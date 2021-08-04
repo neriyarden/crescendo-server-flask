@@ -1,15 +1,31 @@
 import mongodb.mongo_setup as mongo_setup
 from mongodb.models.events import Event
 from mongodb.models.users import User
-# from mongoengine import ObjectId
 from datetime import datetime
+from mongodb.models.tags import Tag
 
 
 """Dummy data for the db"""
 
 
+
+
 def insert_dummydata():
-    joe_mayor = User.objects(id='6106ae3b69972d00690ff294').first()
+    # tags
+    solo = Tag.objects(id='6106b98db94c8b55f3b5e8ae').first()
+    acoustic = Tag.objects(id='6106b98db94c8b55f3b5e8af').first()
+    party = Tag.objects(id='6106b98db94c8b55f3b5e8b0').first()
+    intimate = Tag.objects(id='6106b98db94c8b55f3b5e8b1').first()
+    loud = Tag.objects(id='6106b98db94c8b55f3b5e8b2').first()
+    adults_only = Tag.objects(id='6106b98eb94c8b55f3b5e8b3').first()
+    kids = Tag.objects(id='6106b98eb94c8b55f3b5e8b4').first()
+    sitting = Tag.objects(id='6106b98eb94c8b55f3b5e8b5').first()
+    standing = Tag.objects(id='6106b98eb94c8b55f3b5e8b6').first()
+    accessible = Tag.objects(id='6106b98eb94c8b55f3b5e8b7').first()
+    electronic = Tag.objects(id='6106b98eb94c8b55f3b5e8b8').first()
+    full_band = Tag.objects(id='6106b98eb94c8b55f3b5e8b9').first()
+    joe_mayor = Tag.objects(id='6106ae3b69972d00690ff294').first()
+
     Event.create_event(
         artist_id=joe_mayor,
         tour='Joe Mayer World Tour',
@@ -19,7 +35,8 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='/img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 7, 4, hour=23)
+        datetime=datetime(2021, 7, 4, hour=23),
+        tags=[solo, loud, accessible, standing]
     )
     Event.create_event(
         artist_id=joe_mayor,
@@ -30,7 +47,8 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='/img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 7, 6, hour=22)
+        datetime=datetime(2021, 7, 6, hour=22),
+        tags=[solo, acoustic, electronic, sitting]
     )
     Event.create_event(
         artist_id=joe_mayor,
@@ -41,7 +59,8 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='/img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 8, 7, hour=22)
+        datetime=datetime(2021, 8, 7, hour=22),
+        tags=[full_band, kids, intimate, party]
     )
 
     allou_neder = User.objects(id='6106ae3b69972d00690ff295').first()
@@ -54,7 +73,8 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='/img/events/live2.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 9, 16, hour=22)
+        datetime=datetime(2021, 9, 16, hour=22),
+        tags=[solo, kids, sitting, party]
     )
     Event.create_event(
         artist_id=allou_neder,
@@ -65,7 +85,8 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='/img/events/live2.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 7, 25, hour=20)
+        datetime=datetime(2021, 7, 25, hour=20),
+        tags=[loud, party, adults_only, full_band, standing]
     )
 
 # 1('Zappa Haifa', 1, 'Flieman St 2-8, Haifa, 3508415'),

@@ -1,12 +1,13 @@
-import json
-import os
-import mongodb.mongo_setup as mongo_setup
-from flask import Flask, request
+from datetime import datetime
+
+from flask import Flask
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import check_password_hash, generate_password_hash
-from mongodb.models.users import User
+
+import mongodb.mongo_setup as mongo_setup
 from env import config_env_vars
-from datetime import datetime
+from mongodb.initial_data.events import insert_dummydata
+from routes.artists import Artists
 
 app = Flask(__name__)
 
@@ -14,26 +15,36 @@ app = Flask(__name__)
 with app.app_context():
     config_env_vars()
     mongo_setup.global_init()
+    insert_dummydata()
 
-
-@app.route('/artists')
-def getArtists():
-    size = request.args.get('size') or 25
-    page_num = request.args.get('pageNum') or 0
-    starts_with = request.args.get('startsWith') or ''
-    search_term = request.args.get('searchTerm') or ''
-    artists = User.get_all_artists(size, page_num, starts_with, search_term)
-    return artists.to_json()
-
-
-@app.route('/artists/<string:artist_id>')
-def getArtist(artist_id):
-    artist = User.get_artist_by_id(artist_id)
-    return artist.to_json()
-
+# app.register_blueprint(Artists)
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True) # turn off debug for production
+
+
+
+
+
+# @app.route('/artists')
+# def getArtists():
+#     size        = request.args.get('size') or 25
+#     page_num    = request.args.get('pageNum') or 0
+#     starts_with = request.args.get('startsWith') or ''
+#     search_term = request.args.get('searchTerm') or ''
+
+#     artists = User.get_all_artists(size, page_num, starts_with, search_term)
+#     return artists.to_json()
+
+
+# @app.route('/artists/<string:artist_id>')
+# def getArtist(artist_id):
+#     artist = User.get_artist_by_id(artist_id)
+#     return artist.to_json()
+
+
+
+
 
 # password_hash = generate_password_hash("ny123456!")
 
