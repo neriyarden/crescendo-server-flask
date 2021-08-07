@@ -7,23 +7,23 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask.helpers import send_from_directory
 
 
+from mongodb.initial_data.users import insert_dummydata
 import mongodb.mongo_setup as mongo_setup
 from env import config_env_vars
-from mongodb.initial_data.users import insert_dummydata
 from routes.artists import Artists
+# from mongodb./
 
 
 app = Flask(__name__)
 app.register_blueprint(Artists)
-# cors = CORS(app, supports_credentials=True, resources={
-            # r"/api/*": {"origins": "http://localhost:3000"}})
-# app.config['CORS_HEADERS'] = 'Content-Type'
 CORS(app)
 
 with app.app_context():
     config_env_vars()
     mongo_setup.global_init()
     # insert_dummydata()
+app.config['ARTISTS_IMG_FOLDER'] = '/img/artists'
+
 
 @app.route('/img/<routeName>/<fileName>')
 def get_file(fileName, routeName):
