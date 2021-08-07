@@ -1,5 +1,6 @@
 import datetime
 import mongoengine as me
+from mongodb.models.users import User
 
 
 class Event(me.Document):

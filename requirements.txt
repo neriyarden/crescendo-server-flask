@@ -6,3 +6,4 @@ Werkzeug
 pymongo
 python-dateutil
 mongoengine
+flask_cors

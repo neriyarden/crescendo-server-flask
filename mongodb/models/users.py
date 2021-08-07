@@ -1,4 +1,6 @@
 import datetime
+from os import startfile
+
 import mongoengine as me
 
 
@@ -11,19 +13,24 @@ class User(me.Document):
     is_artist = me.BooleanField(default=False)
 
     @classmethod
-    def create_account(cls, name, email, password, is_artist = False, *args, **kwargs):
+    def create_account(cls, name, email, password, is_artist, *args, **kwargs):
         """"""
         user = Artist(*args, **kwargs) if is_artist else cls()
         user.name = name
         user.email = email
         user.password = password
-        user.is_artist
+        user.is_artist = is_artist
         user.save()
         return user
 
     @classmethod
-    def get_all_artists(cls):
-        artists = cls.objects()
+    def get_all_artists(cls, size, page_num, starts_with, search_term):
+        artists = cls.objects[(page_num - 1) * size:page_num * size].filter(
+            name__istartswith=starts_with,
+            name__icontains=search_term,
+            is_artist=True
+            )
+        
         return artists
 
     @classmethod
@@ -45,5 +52,3 @@ class Artist(User):
     link_to_instagram = me.StringField(max_length=255)
     link_to_facebook = me.StringField(max_length=255)
     link_to_youtube = me.StringField(max_length=255)
-    events = me.ListField(me.ReferenceField('Event'))
-    requests = me.ListField(me.ReferenceField('Request'))
