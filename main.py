@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask.helpers import send_from_directory
 
 
-from mongodb.initial_data.users import insert_dummydata
+from mongodb.initial_data.all import insert_dummydata
 import mongodb.mongo_setup as mongo_setup
 from env import config_env_vars
 from routes.artists import Artists
@@ -21,7 +21,7 @@ CORS(app)
 with app.app_context():
     config_env_vars()
     mongo_setup.global_init()
-    # insert_dummydata()
+    insert_dummydata()
 app.config['ARTISTS_IMG_FOLDER'] = '/img/artists'
 
 

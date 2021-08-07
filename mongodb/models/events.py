@@ -4,7 +4,7 @@ from mongodb.models.users import User
 
 
 class Event(me.Document):
-    artist_id = me.ReferenceField('User', DBRef=True)
+    artist_id = me.ReferenceField('User')
     tour = me.StringField(max_length=50, required=True)
     datetime = me.DateTimeField()
     duration = me.IntField(min_value=20)
@@ -55,6 +55,14 @@ class Event(me.Document):
         event.deleted = deleted
         event.save()
         return event
+
+    @classmethod
+    def get_future_events(cls, size, page_num, artist, city, when, tags):
+        events = cls.objects[(page_num - 1) * size:page_num * size].filter(
+            name__istartswith=starts_with,
+            name__icontains=search_term,
+            is_artist=True
+            )
 
     meta = {
         'collection': 'events',
