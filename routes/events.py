@@ -5,19 +5,18 @@ from mongodb.models.events import Event
 Events = Blueprint('Events', __name__)
 
 
-
-
 # get Events data with filters
 @Events.route('/events', methods=['GET'])
 def get_events():
-    size        = int(request.args.get('size')) or 25
-    page_num    = int(request.args.get('pageNum')) or 0
+    size        = request.args.get('size') or 25
+    page_num    = request.args.get('pageNum') or 1
     artist = request.args.get('artist') or ''
     city = request.args.get('city') or ''
     when = request.args.get('when') or ''
     tags = request.args.get('tags') or []
     
-    events = Event.get_future_events(size, page_num, artist, city, when, tags)
+    events = Event.get_future_events(int(size), int(page_num), artist, city, when, tags)
+    print(events)
     return events.to_json()
 
 

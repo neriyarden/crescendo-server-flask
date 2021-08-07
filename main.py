@@ -11,12 +11,16 @@ from mongodb.initial_data.all import insert_dummydata
 import mongodb.mongo_setup as mongo_setup
 from env import config_env_vars
 from routes.artists import Artists
+from routes.events import Events
 # from mongodb./
 
 
 app = Flask(__name__)
-app.register_blueprint(Artists)
 CORS(app)
+
+app.register_blueprint(Artists)
+app.register_blueprint(Events)
+
 
 with app.app_context():
     config_env_vars()

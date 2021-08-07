@@ -18,12 +18,12 @@ def allowed_file(filename):
 # get artists data with filters
 @Artists.route('/artists', methods=['GET'])
 def get_artists():
-    size        = int(request.args.get('size')) or 25
-    page_num    = int(request.args.get('pageNum')) or 0
+    size        = request.args.get('size') or 25
+    page_num    = request.args.get('pageNum') or 1
     starts_with = request.args.get('startsWith') or ''
     search_term = request.args.get('searchTerm') or ''
     
-    artists = User.get_all_artists(size, page_num, starts_with, search_term)
+    artists = User.get_all_artists(int(size), int(page_num), starts_with, search_term)
     return artists.to_json()
 
 

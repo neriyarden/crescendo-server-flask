@@ -25,12 +25,11 @@ class User(me.Document):
 
     @classmethod
     def get_all_artists(cls, size, page_num, starts_with, search_term):
-        artists = cls.objects[(page_num - 1) * size:page_num * size].filter(
+        artists = cls.objects(
             name__istartswith=starts_with,
             name__icontains=search_term,
             is_artist=True
-            )
-        
+        )[(page_num - 1) * size:page_num * size]
         return artists
 
     @classmethod

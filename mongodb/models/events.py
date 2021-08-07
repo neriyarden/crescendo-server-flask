@@ -1,6 +1,6 @@
 import datetime
-import mongoengine as me
 from mongodb.models.users import User
+import mongoengine as me
 
 
 class Event(me.Document):
@@ -31,11 +31,11 @@ class Event(me.Document):
             img_url,
             ticketseller_url,
             datetime,
-            sold_out = False,
-            came_from_request_id = False,
-            tags = [],
-            featured = False,
-            deleted = False,
+            sold_out=False,
+            came_from_request_id=False,
+            tags=[],
+            featured=False,
+            deleted=False,
             ):
         """"""
         event = cls()
@@ -58,11 +58,23 @@ class Event(me.Document):
 
     @classmethod
     def get_future_events(cls, size, page_num, artist, city, when, tags):
-        events = cls.objects[(page_num - 1) * size:page_num * size].filter(
-            name__istartswith=starts_with,
-            name__icontains=search_term,
-            is_artist=True
-            )
+        days_from_now = {
+            'today': datetime.datetime.now() + datetime.timedelta(days=1),
+            'thisWeek': datetime.datetime.now() + datetime.timedelta(days=7),
+            'thisMonth': datetime.datetime.now() + datetime.timedelta(days=30),
+            'all': datetime.datetime.now() + datetime.timedelta(days=365)
+        }
+        when = days_from_now[when] if when else datetime.datetime.now() + datetime.timedelta(days=365)
+        artist = User.objects(id=artist).first() if artist else ''
+        print(size, page_num, artist, city, when, tags)
+        events = cls.objects(
+            # artist_id=artist,
+            # city__icontains=city,
+            datetime__gte=datetime.datetime.now(),
+            datetime__lte=when,
+            # tags=tags
+            )[(page_num - 1) * size:page_num * size]
+        return events
 
     meta = {
         'collection': 'events',

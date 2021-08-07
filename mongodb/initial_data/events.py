@@ -31,7 +31,7 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 7, 4, hour=23),
+        datetime=datetime(2021, 8, 7, hour=23),
         tags=[solo, loud, accessible, standing]
     )
     Event.create_event(
@@ -43,7 +43,7 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 7, 6, hour=22),
+        datetime=datetime(2021, 8, 20, hour=22),
         tags=[solo, acoustic, electronic, sitting]
     )
     Event.create_event(
@@ -55,7 +55,7 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 8, 7, hour=22),
+        datetime=datetime(2021, 9, 21, hour=22),
         tags=[full_band, kids, intimate, party]
     )
 
