@@ -87,13 +87,14 @@ class Event(me.Document):
         if tags:
             filters['tags__all'] = Tag.objects(id__in=tags)
 
+        featured_event = cls.objects(featured=True).first()
         events_queryset = cls.objects(**filters)[(page_num - 1) * size:page_num * size]
         events_dicts_list = json.loads(events_queryset.to_json())
         for event in events_dicts_list:
             event['artist'] = \
                 User.objects(id=event['artist_id']['$oid']).only('name').first()['name']
 
-        return {'featured': None, 'events': events_dicts_list}
+        return {'featured': json.loads(featured_event.to_json()), 'events': events_dicts_list}
 
     meta = {
         'collection': 'events',
