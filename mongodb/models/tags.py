@@ -1,4 +1,5 @@
 import mongoengine as me
+import json
 
 class Tag(me.Document):
     name = me.StringField(max_length=20, required=True, unique=True)
@@ -10,6 +11,17 @@ class Tag(me.Document):
         tag.name = name
         tag.save()
         return tag
+
+    @classmethod
+    def get_tags(cls):
+        tags_queryset = cls.objects()
+        tags_dicts_list = json.loads(tags_queryset.to_json())
+
+        for i, tag in enumerate(tags_dicts_list):
+            tag['id'] = tag['_id']['$oid']
+            del tag['_id']
+
+        return tags_dicts_list
 
     meta = {
         'collection': 'tags'

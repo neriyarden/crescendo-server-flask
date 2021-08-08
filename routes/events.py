@@ -1,5 +1,6 @@
-from flask import request, Blueprint
+from flask import request, Blueprint, Response
 from mongodb.models.events import Event
+import json
 
 
 Events = Blueprint('Events', __name__)
@@ -13,11 +14,11 @@ def get_events():
     artist = request.args.get('artist') or ''
     city = request.args.get('city') or ''
     when = request.args.get('when') or ''
-    tags = request.args.get('tags') or []
+    tags = request.args.getlist('tags') or []
     
     events = Event.get_future_events(int(size), int(page_num), artist, city, when, tags)
-    print(events)
-    return events.to_json()
+    resp = Response(json.dumps(events), status=200, mimetype='application/json')
+    return resp
 
 
 # get artist data by id

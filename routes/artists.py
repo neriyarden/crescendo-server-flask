@@ -1,6 +1,6 @@
 import os
 
-from flask import Blueprint, flash, request
+from flask import Blueprint, flash, request, Response
 from mongodb.models.users import User
 from werkzeug.utils import secure_filename
 
@@ -24,14 +24,16 @@ def get_artists():
     search_term = request.args.get('searchTerm') or ''
     
     artists = User.get_all_artists(int(size), int(page_num), starts_with, search_term)
-    return artists.to_json()
+    resp = Response(artists.to_json(), status=200, mimetype='application/json')
+    return resp
 
 
 # get artist data by id
 @Artists.route('/artists/<string:artist_id>', methods=['GET'])
 def get_artist(artist_id):
     artist = User.get_artist_by_id(artist_id)
-    return artist.to_json()
+    resp = Response(artist.to_json(), status=200, mimetype='application/json')
+    return resp
 
 
 # finish this
@@ -45,7 +47,7 @@ def update_artist():
     link_to_youtube = request.form.get('link_to_youtube')
 
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
+        filename = secure_filename(file.filename) # add /img/artists
         file.save(os.path.join(Artists.config['ARTISTS_IMG_FOLDER'], filename))
 
     return 'asdljhgadlfiugauiuehqwpeur889'

@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from mongodb.models.tags import Tag
 from mongodb.models.events import Event
 from mongodb.models.users import User
@@ -353,9 +353,10 @@ def insert_dummydata():
         venue='Zappa Haifa',
         city='Haifa',
         description='wow amazing cool',
-        img_url='img/events/live1.jpg',
+        img_url='/img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 8, 7, hour=23),
+        date=datetime.date(2021, 8, 7).strftime("%d/%m/%Y"),
+        time=datetime.time(23).strftime("%H:%M:%S"),
         tags=[Solo, Loud, Accessible, Standing]
     )
     Event.create_event(
@@ -365,9 +366,10 @@ def insert_dummydata():
         venue='Barby',
         city='Tel Aviv',
         description='wow amazing cool',
-        img_url='img/events/live1.jpg',
+        img_url='/img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 8, 20, hour=22),
+        date=datetime.date(2021, 8, 20).strftime("%d/%m/%Y"),
+        time=datetime.time(22).strftime("%H:%M:%S"),
         tags=[Solo, Acoustic, Electronic, Sitting]
     )
     Event.create_event(
@@ -377,9 +379,10 @@ def insert_dummydata():
         venue='הצוללת הצהובה',
         city='Jerusalem',
         description='wow amazing cool',
-        img_url='img/events/live1.jpg',
+        img_url='/img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 9, 21, hour=22),
+        date=datetime.date(2021, 9, 21).strftime("%d/%m/%Y"),
+        time=datetime.time(22).strftime("%H:%M:%S"),
         tags=[Full_Band, Kids, Intimate, Party]
     )
     Event.create_event(
@@ -389,9 +392,10 @@ def insert_dummydata():
         venue='Zappa Haifa',
         city='Haifa',
         description='wow amazing cool',
-        img_url='img/events/live2.jpg',
+        img_url='/img/events/live2.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 9, 16, hour=22),
+        date=datetime.date(2021, 9, 16).strftime("%d/%m/%Y"),
+        time=datetime.time(22).strftime("%H:%M:%S"),
         tags=[Solo, Kids, Sitting, Party]
     )
     Event.create_event(
@@ -401,9 +405,10 @@ def insert_dummydata():
         venue='Barby',
         city='Tel Aviv',
         description='wow amazing cool',
-        img_url='img/events/live2.jpg',
+        img_url='/img/events/live2.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 8, 12, hour=20),
+        date=datetime.date(2021, 7, 25).strftime("%d/%m/%Y"),
+        time=datetime.time(20).strftime("%H:%M:%S"),
         tags=[Loud, Party, _18, Full_Band, Standing]
     )
 

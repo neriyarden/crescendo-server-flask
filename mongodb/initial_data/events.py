@@ -31,7 +31,9 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 8, 7, hour=23),
+        date=datetime.date(2021, 8, 7).strftime("%d/%m/%Y"),
+        # https://docs.python.org/3/library/datetime.html#datetime.date.fromisoformat
+        time=datetime.time(23).strftime("%H:%M:%S"),
         tags=[solo, loud, accessible, standing]
     )
     Event.create_event(
@@ -43,7 +45,8 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 8, 20, hour=22),
+        date=datetime.date(2021, 8, 20).strftime("%d/%m/%Y"),
+        time=datetime.time(22).strftime("%H:%M:%S"),
         tags=[solo, acoustic, electronic, sitting]
     )
     Event.create_event(
@@ -55,7 +58,8 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='img/events/live1.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 9, 21, hour=22),
+        date=datetime.date(2021, 9, 21).strftime("%d/%m/%Y"),
+        time=datetime.time(22).strftime("%H:%M:%S"),
         tags=[full_band, kids, intimate, party]
     )
 
@@ -69,7 +73,8 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='img/events/live2.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 9, 16, hour=22),
+        date=datetime.date(2021, 9, 16).strftime("%d/%m/%Y"),
+        time=datetime.time(22).strftime("%H:%M:%S"),
         tags=[solo, kids, sitting, party]
     )
     Event.create_event(
@@ -81,7 +86,8 @@ def insert_dummydata():
         description='wow amazing cool',
         img_url='img/events/live2.jpg',
         ticketseller_url='https://www.eventim.co.il/',
-        datetime=datetime(2021, 7, 25, hour=20),
+        date=datetime.date(2021, 7, 25).strftime("%d/%m/%Y"),
+        time=datetime.time(20).strftime("%H:%M:%S"),
         tags=[loud, party, adults_only, full_band, standing]
     )
 

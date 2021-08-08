@@ -1,5 +1,5 @@
 import datetime
 
-d = datetime.datetime.now()
-x = datetime.timedelta(days=10)
-print(d + x)
+d = datetime.date(2021, 8, 20).strftime("%d/%m/%Y")
+x = datetime.time(23).strftime("%H:%M")
+print(x)
