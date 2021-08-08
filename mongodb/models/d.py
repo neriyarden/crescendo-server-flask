@@ -1,5 +1,5 @@
 import datetime
 
-d = datetime.date(2021, 8, 20).strftime("%d/%m/%Y")
+d = datetime.datetime.strptime('07/08/2021', "%d/%m/%Y").date()
 x = datetime.time(23).strftime("%H:%M")
-print(x)
+print(d)

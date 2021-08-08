@@ -13,6 +13,7 @@ from env import config_env_vars
 from routes.artists import Artists
 from routes.events import Events
 from routes.tags import Tags
+from routes.sign_in import Sign_in
 # from mongodb./
 
 
@@ -22,6 +23,7 @@ CORS(app)
 app.register_blueprint(Artists)
 app.register_blueprint(Events)
 app.register_blueprint(Tags)
+app.register_blueprint(Sign_in)
 
 
 with app.app_context():

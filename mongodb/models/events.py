@@ -90,11 +90,26 @@ class Event(me.Document):
         featured_event = cls.objects(featured=True).first()
         events_queryset = cls.objects(**filters)[(page_num - 1) * size:page_num * size]
         events_dicts_list = json.loads(events_queryset.to_json())
-        for event in events_dicts_list:
+        for i, event in enumerate(events_dicts_list):
             event['artist'] = \
                 User.objects(id=event['artist_id']['$oid']).only('name').first()['name']
+            event_date = datetime.datetime.strptime(event['date'], "%d/%m/%Y").date()
+            if event_date < datetime.datetime.now().date(): # make this more effecient by defining a date object in the db
+                del events_dicts_list[i]
 
         return {'featured': json.loads(featured_event.to_json()), 'events': events_dicts_list}
+
+    @classmethod
+    def get_past_events(cls):
+        events_queryset = cls.objects()
+        events_dicts_list = json.loads(events_queryset.to_json())
+        past_events = []
+        for event in events_dicts_list:
+            event_date = datetime.datetime.strptime(event['date'], "%d/%m/%Y").date()
+            if event_date < datetime.datetime.now().date():
+                past_events.append(event)
+        return {'events': past_events}
+
 
     meta = {
         'collection': 'events',

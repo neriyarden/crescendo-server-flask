@@ -37,6 +37,11 @@ class User(me.Document):
         artist = cls.objects(id=id)
         return artist
 
+    @classmethod
+    def validate_user(cls, email, password):
+        existing_user = cls.objects(email=email, password=password).first()
+        return existing_user
+
     meta = {
         'collection': 'users',
         'indexes': [('name','email')],
