@@ -1,22 +1,24 @@
-from flask import request, Blueprint
-from mongodb.models.users import User
+from flask import request, Blueprint, Response
+from mongodb.models.events import Event
+import json
 
 
 Events = Blueprint('Events', __name__)
-
-
 
 
 # get Events data with filters
 @Events.route('/events', methods=['GET'])
 def get_events():
     size        = request.args.get('size') or 25
-    page_num    = request.args.get('pageNum') or 0
-#     starts_with = request.args.get('startsWith') or ''
-#     search_term = request.args.get('searchTerm') or ''
+    page_num    = request.args.get('pageNum') or 1
+    artist = request.args.get('artist') or ''
+    city = request.args.get('city') or ''
+    when = request.args.get('when') or ''
+    tags = request.args.getlist('tags') or []
     
-#     artists = User.get_all_artists(size, page_num, starts_with, search_term)
-#     return artists.to_json()
+    events = Event.get_future_events(int(size), int(page_num), artist, city, when, tags)
+    resp = Response(json.dumps(events), status=200, mimetype='application/json')
+    return resp
 
 
 # get artist data by id
