@@ -45,6 +45,12 @@ class User(me.Document):
         existing_user = cls.objects(email=email, password=password).first()
         return existing_user
 
+    @classmethod
+    def get_user_details(cls, user_id):
+        """"""
+        user_details = cls.objects(id=user_id).first()
+        return user_details
+
 
     meta = {
         'collection': 'users',

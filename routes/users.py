@@ -39,3 +39,10 @@ def register_user():
         200,
         mimetype='application/json'
         )
+
+@Users.route('/users/<string:user_id>', methods=['get'])
+def get_user(user_id):
+    user_details = User.get_user_details(user_id)
+    if not user_details:
+        return Response('No results', 404, mimetype='application/json')
+    return Response(user_details.to_json(), 200, mimetype='application/json')
