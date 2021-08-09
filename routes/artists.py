@@ -1,6 +1,6 @@
 import os
 
-from flask import Blueprint, flash, request, Response
+from flask import Blueprint, request, Response
 from mongodb.models.users import User
 from werkzeug.utils import secure_filename
 

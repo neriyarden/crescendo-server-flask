@@ -25,6 +25,7 @@ class User(me.Document):
 
     @classmethod
     def get_all_artists(cls, size, page_num, starts_with, search_term):
+        """"""
         artists = cls.objects(
             name__istartswith=starts_with,
             name__icontains=search_term,
@@ -34,13 +35,16 @@ class User(me.Document):
 
     @classmethod
     def get_artist_by_id(cls, id):
+        """"""
         artist = cls.objects(id=id)
         return artist
 
     @classmethod
     def validate_user(cls, email, password):
+        """"""
         existing_user = cls.objects(email=email, password=password).first()
         return existing_user
+
 
     meta = {
         'collection': 'users',
