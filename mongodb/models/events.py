@@ -90,14 +90,19 @@ class Event(me.Document):
         featured_event = cls.objects(featured=True).first()
         events_queryset = cls.objects(**filters)[(page_num - 1) * size:page_num * size]
         events_dicts_list = json.loads(events_queryset.to_json())
-        for i, event in enumerate(events_dicts_list):
+        events_dicts_list_results = []
+
+        for event in events_dicts_list:
+            event['id'] = event['_id']['$oid']
             event['artist'] = \
                 User.objects(id=event['artist_id']['$oid']).only('name').first()['name']
-            event_date = datetime.datetime.strptime(event['date'], "%d/%m/%Y").date()
-            if event_date < datetime.datetime.now().date(): # make this more effecient by defining a date object in the db
-                del events_dicts_list[i]
 
-        return {'featured': json.loads(featured_event.to_json()), 'events': events_dicts_list}
+            event_date = datetime.datetime.strptime(event['date'], "%d/%m/%Y").date()
+            if event_date >= datetime.datetime.now().date(): # make this more effecient by defining a date object in the db
+                events_dicts_list_results.append(event)
+
+
+        return {'featured': json.loads(featured_event.to_json()), 'events': events_dicts_list_results}
 
     @classmethod
     def get_past_events(cls):
@@ -105,11 +110,21 @@ class Event(me.Document):
         events_dicts_list = json.loads(events_queryset.to_json())
         past_events = []
         for event in events_dicts_list:
-            event_date = datetime.datetime.strptime(event['date'], "%d/%m/%Y").date()
+            event_date = datetime.datetime \
+                .strptime(event['date'], "%d/%m/%Y").date()
             if event_date < datetime.datetime.now().date():
                 past_events.append(event)
         return {'events': past_events}
 
+    @classmethod
+    def get_event_by_id(cls, event_id):
+        event = cls.objects(id=event_id).first()
+        event_dict = json.loads(event.to_json())
+        event_dict['artist'] = \
+            User.objects(id=event_dict['artist_id']['$oid']) \
+                .only('name').first()['name']
+
+        return event_dict
 
     meta = {
         'collection': 'events',

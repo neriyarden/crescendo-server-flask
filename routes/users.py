@@ -15,7 +15,6 @@ def register_user():
     password = request.json['password']
     repeat_password = request.json['repeat_password']
     is_artist = bool(request.json['is_artist'])
-    print(name, email, password, repeat_password, is_artist)
     artist_fields = {
         'img_url': '',
         'bio': '',

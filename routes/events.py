@@ -24,6 +24,13 @@ def get_events():
     return resp
 
 
+@Events.route('/events/<string:event_id>', methods=['GET'])
+def get_event_by_id(event_id):
+    event = Event.get_event_by_id(event_id)
+    resp = Response(json.dumps(event), status=200, mimetype='application/json')
+    return resp
+
+
 # get artist data by id
 # @Events.route('/events/<string:artist_id>', methods=['GET'])
 # def get_artist(artist_id):
