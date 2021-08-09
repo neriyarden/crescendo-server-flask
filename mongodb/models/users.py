@@ -1,14 +1,19 @@
 import datetime
 from os import startfile
+from typing import Sequence
 
 import mongoengine as me
+import json
+
+from mongodb.utils import flatten_id_field, normalize_date_field
 
 
 class User(me.Document):
+    # id = SequenceField()
     name = me.StringField(max_length=50, required=True, unique=True)
     email = me.EmailField(max_length=50, required=True, unique=True)
     password = me.StringField(max_length=50, required=True)
-    joined_at = me.DateTimeField(default=datetime.datetime.utcnow)
+    joined_at = me.DateTimeField(default=datetime.datetime.now)
     votes = me.ListField(me.DictField())
     is_artist = me.BooleanField(default=False)
 
@@ -36,8 +41,10 @@ class User(me.Document):
     @classmethod
     def get_artist_by_id(cls, id):
         """"""
-        artist = cls.objects(id=id)
-        return artist
+        artist = cls.objects(id=id).first()
+        artist_dict = json.loads(artist.to_json())
+        artist_dict['joined_at'] = artist.joined_at.isoformat()[:10]
+        return flatten_id_field(artist_dict)
 
     @classmethod
     def validate_user(cls, email, password):

@@ -1,11 +1,10 @@
+import datetime
 
-genres
-search_term
+# x = datetime.datetime.fromtimestamp(1628414143985)
 
+# print(x)
 
+epoch_time = 1571005498
+datetime_time = datetime.datetime.fromtimestamp(epoch_time)
 
-
-games = Games.objects(
-    genres=Genres.objects(id__in=genres)
-    platforms
-)
+print(datetime_time)

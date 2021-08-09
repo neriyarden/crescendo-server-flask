@@ -1,4 +1,5 @@
 import os
+import json
 
 from flask import Blueprint, request, Response
 from mongodb.models.users import User
@@ -31,8 +32,10 @@ def get_artists():
 # get artist data by id
 @Artists.route('/artists/<string:artist_id>', methods=['GET'])
 def get_artist(artist_id):
-    artist = User.get_artist_by_id(artist_id)
-    resp = Response(artist.to_json(), status=200, mimetype='application/json')
+    artist_details = User.get_artist_by_id(artist_id)
+    if not artist_details:
+        return Response('No results', 404, mimetype='application/json')
+    resp = Response(json.dumps(artist_details), status=200, mimetype='application/json')
     return resp
 
 
