@@ -7,7 +7,6 @@ import json
 
 from mongodb.utils import flatten_id_field, normalize_date_field
 
-
 class User(me.Document):
     # id = SequenceField()
     name = me.StringField(max_length=50, required=True, unique=True)

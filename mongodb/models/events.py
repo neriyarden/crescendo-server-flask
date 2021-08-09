@@ -4,7 +4,7 @@ import datetime
 from mongodb.models.users import User
 from mongodb.models.tags import Tag
 import mongoengine as me
-from mongodb.utils import get_date_filter
+from mongodb.utils import flatten_id_field
 
 
 class Event(me.Document):
@@ -92,8 +92,10 @@ class Event(me.Document):
         events_dicts_list = json.loads(events_queryset.to_json())
         events_dicts_list_results = []
 
+        events_dicts_list = flatten_id_field(events_dicts_list)
+        events_dicts_list = add_artist_name_field(events_dicts_list)
+        
         for event in events_dicts_list:
-            event['id'] = event['_id']['$oid']
             event['artist'] = \
                 User.objects(id=event['artist_id']['$oid']).only('name').first()['name']
 
@@ -125,6 +127,16 @@ class Event(me.Document):
                 .only('name').first()['name']
 
         return event_dict
+
+    @classmethod
+    def get_events_of_artist(cls, artist_id):
+        events_of_artist = cls.objects(artist_id=artist_id)
+        events_dict = json.loads(events_of_artist.to_json())
+        for event in events_dict:
+            event['artist'] = \
+                User.objects(id=event['artist_id']['$oid']).only('name').first()['name']
+
+        return events_dict
 
     meta = {
         'collection': 'events',

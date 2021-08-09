@@ -16,7 +16,6 @@ def get_date_filter(when):
 
 def flatten_id_field(results):
     if type(results) == list:
-        results = [results]
         for res in results:
             res['id'] = res['_id']['$oid']
             del res['_id']
@@ -37,3 +36,13 @@ def normalize_date_field(results, fieldName):
     if type(results) == dict:
         results[fieldName] = results[fieldName]['$date'].isoformat()
     return results
+
+
+# def add_artist_name_field(results):
+#     if type(results) == dict: results = [results]
+#     if type(results) == list:
+#         for res in results:
+#             res['artist'] = \
+#                 User.objects(id=res['artist_id']['$oid']) \
+#                     .only('name').first()['name']                
+#     return results

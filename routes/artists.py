@@ -1,8 +1,10 @@
+from mongodb.models.events import Event
 import os
 import json
 
 from flask import Blueprint, request, Response
 from mongodb.models.users import User
+from mongodb.models.events import Event
 from werkzeug.utils import secure_filename
 
 Artists = Blueprint('Artists', __name__)
@@ -38,6 +40,14 @@ def get_artist(artist_id):
     resp = Response(json.dumps(artist_details), status=200, mimetype='application/json')
     return resp
 
+
+@Artists.route('/artists/<string:artist_id>/events', methods=['GET'])
+def get_events_of_artist(artist_id):
+    artist_events = Event.get_events_of_artist(artist_id)
+    if not artist_events:
+        return Response('No results', 404, mimetype='application/json')
+    resp = Response(json.dumps(artist_events), status=200, mimetype='application/json')
+    return resp
 
 # finish this
 @Artists.route('/artists', methods=['PATCH'])
