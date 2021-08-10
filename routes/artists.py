@@ -7,9 +7,8 @@ from mongodb.models.users import User
 from mongodb.models.events import Event
 from werkzeug.utils import secure_filename
 
+
 Artists = Blueprint('Artists', __name__)
-
-
 ALLOWED_EXTENSIONS = {'jfif', 'png', 'jpg', 'jpeg', 'gif'}
 
 

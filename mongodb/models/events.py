@@ -93,7 +93,6 @@ class Event(me.Document):
         events_dicts_list_results = []
 
         events_dicts_list = flatten_id_field(events_dicts_list)
-        events_dicts_list = add_artist_name_field(events_dicts_list)
         
         for event in events_dicts_list:
             event['artist'] = \
