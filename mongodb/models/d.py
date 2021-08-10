@@ -1,5 +1,10 @@
 import datetime
 
-d = datetime.date(2021, 8, 20).strftime("%d/%m/%Y")
-x = datetime.time(23).strftime("%H:%M")
-print(x)
+# x = datetime.datetime.fromtimestamp(1628414143985)
+
+# print(x)
+
+epoch_time = 1571005498
+datetime_time = datetime.datetime.fromtimestamp(epoch_time)
+
+print(datetime_time)

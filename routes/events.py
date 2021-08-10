@@ -16,8 +16,18 @@ def get_events():
     when = request.args.get('when') or ''
     tags = request.args.getlist('tags') or []
     
-    events = Event.get_future_events(int(size), int(page_num), artist, city, when, tags)
+    if when != 'past':
+        events = Event.get_future_events(int(size), int(page_num), artist, city, when, tags)
+    if when == 'past':
+        events = Event.get_past_events()
     resp = Response(json.dumps(events), status=200, mimetype='application/json')
+    return resp
+
+
+@Events.route('/events/<string:event_id>', methods=['GET'])
+def get_event_by_id(event_id):
+    event = Event.get_event_by_id(event_id)
+    resp = Response(json.dumps(event), status=200, mimetype='application/json')
     return resp
 
 

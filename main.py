@@ -11,17 +11,27 @@ from mongodb.initial_data.all import insert_dummydata
 import mongodb.mongo_setup as mongo_setup
 from env import config_env_vars
 from routes.artists import Artists
+from routes.users import Users
 from routes.events import Events
 from routes.tags import Tags
-# from mongodb./
+from routes.sign_in import Sign_in
+
+
+CLIENT_PATH = 'http://localhost:3000'
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
+# CORS(app, supports_credentials=True, resources={
+    # r'/api/*': {'origins': CLIENT_PATH}
+# })
+# app.config[]
 
 app.register_blueprint(Artists)
+app.register_blueprint(Users)
 app.register_blueprint(Events)
 app.register_blueprint(Tags)
+app.register_blueprint(Sign_in)
 
 
 with app.app_context():
@@ -32,33 +42,13 @@ app.config['ARTISTS_IMG_FOLDER'] = '/img/artists'
 app.config['EVENTS_IMG_FOLDER'] = '/img/events'
 
 
-@app.route('/img/<routeName>/<fileName>')
-def get_file(fileName, routeName):
-    return send_from_directory(f'img/{routeName}', fileName)
+@app.route('/img/<dir_name>/<file_name>')
+def get_file(dir_name, file_name):
+    return send_from_directory(f'img/{dir_name}', file_name)
 
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True) # turn off debug for production
-
-
-
-
-
-# @app.route('/artists')
-# def get_artists():
-#     size        = request.args.get('size') or 25
-#     page_num    = request.args.get('pageNum') or 0
-#     starts_with = request.args.get('startsWith') or ''
-#     search_term = request.args.get('searchTerm') or ''
-
-#     artists = User.get_all_artists(size, page_num, starts_with, search_term)
-#     return artists.to_json()
-
-
-# @app.route('/artists/<string:artist_id>')
-# def get_artist(artist_id):
-#     artist = User.get_artist_by_id(artist_id)
-#     return artist.to_json()
 
 
 

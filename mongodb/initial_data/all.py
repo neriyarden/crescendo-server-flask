@@ -383,7 +383,8 @@ def insert_dummydata():
         ticketseller_url='https://www.eventim.co.il/',
         date=datetime.date(2021, 9, 21).strftime("%d/%m/%Y"),
         time=datetime.time(22).strftime("%H:%M:%S"),
-        tags=[Full_Band, Kids, Intimate, Party]
+        tags=[Full_Band, Kids, Intimate, Party],
+        featured=True
     )
     Event.create_event(
         artist_id=an,

@@ -17,7 +17,7 @@ class Tag(me.Document):
         tags_queryset = cls.objects()
         tags_dicts_list = json.loads(tags_queryset.to_json())
 
-        for i, tag in enumerate(tags_dicts_list):
+        for tag in tags_dicts_list:
             tag['id'] = tag['_id']['$oid']
             del tag['_id']
 
