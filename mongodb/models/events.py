@@ -84,7 +84,8 @@ class Event(me.Document):
                 name__icontains=artist,
                 is_artist=True
             )
-        filters['votes'] = User.objects(votes__e=tags)
+        if tags:
+            filters['tags__all'] = User.objects(votes__in=tags)
 
         featured_event = cls.objects(featured=True).first()
         events_queryset = cls.objects(**filters)[(page_num - 1) * size:page_num * size]
@@ -131,6 +132,7 @@ class Event(me.Document):
         events_of_artist = cls.objects(artist_id=artist_id)
         events_dict = json.loads(events_of_artist.to_json())
         for event in events_dict:
+            # try without only and with User.get_artist_name
             event['artist'] = \
                 User.objects(id=event['artist_id']['$oid']).only('name').first()['name']
 

@@ -10,7 +10,7 @@ from flask.helpers import send_from_directory
 from mongodb.initial_data.all import insert_dummydata
 import mongodb.mongo_setup as mongo_setup
 from env import config_env_vars
-from routes.artists import Artists
+from routes.artists import Artists, ARTISTS_IMG_FOLDER
 from routes.users import Users
 from routes.events import Events
 from routes.requests import Requests
@@ -23,10 +23,7 @@ CLIENT_PATH = 'http://localhost:3000'
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
-# CORS(app, supports_credentials=True, resources={
-    # r'/api/*': {'origins': CLIENT_PATH}
-# })
-# app.config[]
+
 
 app.register_blueprint(Artists)
 app.register_blueprint(Users)
@@ -40,7 +37,7 @@ with app.app_context():
     config_env_vars()
     mongo_setup.global_init()
     # insert_dummydata()
-app.config['ARTISTS_IMG_FOLDER'] = '/img/artists'
+app.config['ARTISTS_IMG_FOLDER'] = ARTISTS_IMG_FOLDER
 app.config['EVENTS_IMG_FOLDER'] = '/img/events'
 
 
