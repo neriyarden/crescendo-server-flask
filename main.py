@@ -13,6 +13,7 @@ from env import config_env_vars
 from routes.artists import Artists
 from routes.users import Users
 from routes.events import Events
+from routes.requests import Requests
 from routes.tags import Tags
 from routes.sign_in import Sign_in
 
@@ -30,6 +31,7 @@ CORS(app, supports_credentials=True)
 app.register_blueprint(Artists)
 app.register_blueprint(Users)
 app.register_blueprint(Events)
+app.register_blueprint(Requests)
 app.register_blueprint(Tags)
 app.register_blueprint(Sign_in)
 

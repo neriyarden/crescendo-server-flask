@@ -13,7 +13,7 @@ class User(me.Document):
     email = me.EmailField(max_length=50, required=True, unique=True)
     password = me.StringField(max_length=50, required=True)
     joined_at = me.DateTimeField(default=datetime.datetime.now)
-    votes = me.ListField(me.DictField())
+    votes = me.ListField(me.ReferenceField('Request'))
     is_artist = me.BooleanField(default=False)
 
     @classmethod
@@ -56,6 +56,12 @@ class User(me.Document):
         """"""
         user_details = cls.objects(id=user_id).first()
         return user_details
+
+    @classmethod
+    def get_user_votes(cls, user_id):
+        """"""
+        user_votes = cls.objects(id=user_id).first().only('votes')
+        return user_votes
 
 
     meta = {

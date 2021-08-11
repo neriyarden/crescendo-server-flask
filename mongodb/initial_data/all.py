@@ -22,8 +22,8 @@ def insert_dummydata():
     Full_Band = Tag.create_tag('Full Band')
 
 
-    User.create_account('john doe', 'johndoe@gmail.com', 'jd123456!', False)
-    User.create_account('sarah j', 'sra@gmail.com', 'sj123456!', False)
+    jd = User.create_account('john doe', 'johndoe@gmail.com', 'jd123456!', False)
+    sj = User.create_account('sarah j', 'sra@gmail.com', 'sj123456!', False)
     jm = User.create_account(
         name='Joe Mayor',
         email='joe_m@gmail.com',
@@ -413,15 +413,38 @@ def insert_dummydata():
         tags=[Loud, Party, _18, Full_Band, Standing]
     )
 
-    Request.create_request(
+    req1 = Request.create_request(
         artist_id = jm,
         tour = 'Joe Mayor World Tour',
         city = 'Afula',
         cap = 1200
+
     )
-    Request.create_request(
+    req2 = Request.create_request(
         artist_id = an,
         tour = 'Allóu Neder Israel Tour',
         city = 'Jerusalem',
         cap = 1400
     )
+
+    Request.cast_vote(req1, jd)
+    Request.cast_vote(req2, jd)
+    Request.cast_vote(req1, bb)
+    Request.cast_vote(req1, lf)
+    Request.cast_vote(req2, lf)
+    Request.cast_vote(req1, no)
+    Request.cast_vote(req2, no)
+    Request.cast_vote(req1, dc)
+    Request.cast_vote(req1, fd)
+    Request.cast_vote(req1, pl)
+    Request.cast_vote(req2, pl)
+    Request.cast_vote(req1, ds)
+    Request.cast_vote(req1, df)
+    Request.cast_vote(req1, hp)
+    Request.cast_vote(req2, hp)
+    Request.cast_vote(req1, cj)
+    Request.cast_vote(req1, jb)
+    Request.cast_vote(req2, jb)
+    Request.cast_vote(req1, an)
+    Request.cast_vote(req1, jm)
+    Request.cast_vote(req2, jm)
