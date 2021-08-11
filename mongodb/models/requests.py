@@ -1,7 +1,7 @@
 import json
 
 from flask.globals import request
-from mongodb.utils import flatten_id_field
+from mongodb.utils import flatten_id_field, normalize_date_field
 from mongodb.models.users import User
 import datetime
 import mongoengine as me
@@ -12,6 +12,8 @@ class Request(me.Document):
     requested_at = me.DateTimeField(default=datetime.datetime.utcnow)
     city = me.StringField(max_length=50, required=True)
     cap = me.IntField(min_value=1)
+    deleted = me.BooleanField(default=False)
+
     
     @classmethod
     def create_request(cls, artist_id, tour, city, cap):
@@ -61,6 +63,21 @@ class Request(me.Document):
         request_dict['artist_id'] = request_dict['artist_id']['$oid']
         request_dict['votes'] = User.objects(votes=request_dict['request_id']).count()
         return json.dumps(request_dict)
+
+    @classmethod
+    def get_requests_of_artist(cls, artist_id):
+        requests_of_artist = cls.objects(artist_id=artist_id)
+        requests_dict_list = json.loads(requests_of_artist.to_json())
+        for request in requests_dict_list:
+            request = flatten_id_field(request)
+            artist_queryset = User.objects(id=request['artist_id']['$oid']).first()
+            request['artist_id'] = request['artist_id']['$oid']
+            request['artist'] = artist_queryset['name']
+            request['img_url'] = artist_queryset['img_url']
+            request['votes'] = User.objects(votes=request['id']).count()
+            request['requested_at'] = cls.objects(id=request['id']).first().requested_at.isoformat()[:10]
+
+        return json.dumps(requests_dict_list)
 
     @classmethod
     def cast_vote(cls, request_id, user_id):

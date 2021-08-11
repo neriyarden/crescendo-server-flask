@@ -1,4 +1,5 @@
 from mongodb.models.events import Event
+from mongodb.models.requests import Request
 import os
 import json
 
@@ -49,7 +50,15 @@ def get_events_of_artist(artist_id):
     resp = Response(json.dumps(artist_events), status=200, mimetype='application/json')
     return resp
 
-# finish this
+
+@Artists.route('/artists/<string:artist_id>/requests', methods=['GET'])
+def get_requests_of_artist(artist_id):
+    artist_requests = Request.get_requests_of_artist(artist_id)
+    if not artist_requests:
+        return Response('No results', 404, mimetype='application/json')
+    resp = Response(artist_requests, status=200, mimetype='application/json')
+    return resp
+
 @Artists.route('/artists', methods=['PATCH'])
 def edit_artist_data():
     file = request.files.get('newImg')
