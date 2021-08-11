@@ -84,7 +84,8 @@ class Event(me.Document):
                 name__icontains=artist,
                 is_artist=True
             )
-        filters['votes'] = User.objects(votes__e=tags)
+        if tags:
+            filters['tags__all'] = User.objects(votes__in=tags)
 
         featured_event = cls.objects(featured=True).first()
         events_queryset = cls.objects(**filters)[(page_num - 1) * size:page_num * size]

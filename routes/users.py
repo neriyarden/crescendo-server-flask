@@ -41,7 +41,30 @@ def register_user():
         mimetype='application/json'
         )
 
-@Users.route('/users/<string:user_id>', methods=['get'])
+
+@Users.route('/users', methods=['PATCH'])
+def edit_user_data():
+    user_id = request.json['id']
+    name = request.json['name']
+    password = request.json['password']
+    repeat_password = request.json['repeat_password']
+    # DRY this part
+    if password != repeat_password:
+        return Response(
+            json.dumps({'error': 'Passwords don\'t match'}),
+            400,
+            mimetype='application/json'
+            )
+
+    updated_user = User.edit_user_data(user_id, name, password)
+    return Response(
+        updated_user,
+        200,
+        mimetype='application/json'
+        )
+    
+
+@Users.route('/users/<string:user_id>', methods=['GET'])
 def get_user(user_id):
     user_details = User.get_user_details(user_id)
     if not user_details:
@@ -49,7 +72,7 @@ def get_user(user_id):
     return Response(user_details.to_json(), 200, mimetype='application/json')
 
 
-@Users.route('/users/<string:user_id>/votes', methods=['get'])
+@Users.route('/users/<string:user_id>/votes', methods=['GET'])
 def get_user_votes(user_id):
     user_votes = User.get_user_votes(user_id)
     for vote in user_votes:
@@ -61,4 +84,3 @@ def get_user_votes(user_id):
         del vote['$oid']
 
     return Response(json.dumps(user_votes), 200, mimetype='application/json')
-

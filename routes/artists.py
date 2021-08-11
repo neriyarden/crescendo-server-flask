@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 
 
 Artists = Blueprint('Artists', __name__)
+ARTISTS_IMG_FOLDER = '/img/artists'
 ALLOWED_EXTENSIONS = {'jfif', 'png', 'jpg', 'jpeg', 'gif'}
 
 
@@ -50,16 +51,28 @@ def get_events_of_artist(artist_id):
 
 # finish this
 @Artists.route('/artists', methods=['PATCH'])
-def update_artist():
-    file = request.files.get('file')
+def edit_artist_data():
+    file = request.files.get('newImg')
     user_id = request.form.get('user_id')
+    bio = request.form.get('bio')
     link_to_spotify = request.form.get('link_to_spotify')
     link_to_instagram = request.form.get('link_to_instagram')
     link_to_facebook = request.form.get('link_to_facebook')
     link_to_youtube = request.form.get('link_to_youtube')
-
+    filename = None
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename) # add /img/artists
-        file.save(os.path.join(Artists.config['ARTISTS_IMG_FOLDER'], filename))
-
-    return 'asdljhgadlfiugauiuehqwpeur889'
+        filename = os.path.join(
+            ARTISTS_IMG_FOLDER.lstrip('/'),
+            secure_filename(file.filename)
+        )
+        file.save(filename)
+    updated_user = User.edit_artist_data(
+        user_id,
+        bio,
+        link_to_spotify,
+        link_to_instagram,
+        link_to_facebook,
+        link_to_youtube,
+        filename
+        )
+    return Response(updated_user, 200, mimetype='application/json')

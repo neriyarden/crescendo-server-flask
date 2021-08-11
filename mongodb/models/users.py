@@ -5,6 +5,7 @@ import json
 
 from mongodb.utils import flatten_id_field
 
+
 class User(me.Document):
     # id = SequenceField()
     name = me.StringField(max_length=50, required=True, unique=True)
@@ -24,6 +25,36 @@ class User(me.Document):
         user.is_artist = is_artist
         user.save()
         return user
+
+    @classmethod
+    def edit_user_data(cls, user_id, name, password):
+        user_queryset = cls.objects(id=user_id).update(
+            set__name=name,
+            set__password=password
+        )
+        return user_queryset.to_json()
+
+    @classmethod
+    def edit_artist_data(
+        cls,
+        user_id,
+        bio,
+        link_to_spotify,
+        link_to_instagram,
+        link_to_facebook,
+        link_to_youtube,
+        filename
+    ):
+        user_queryset = cls.objects(id=user_id).update(
+            set__bio=bio,
+            set__link_to_spotify=link_to_spotify,
+            set__link_to_instagram=link_to_instagram,
+            set__link_to_facebook=link_to_facebook,
+            set__link_to_youtube=link_to_youtube,
+            set__img_url=filename
+        )
+        print(user_queryset)
+        return user_queryset
 
     @classmethod
     def get_all_artists(cls, size, page_num, starts_with, search_term):
@@ -63,21 +94,21 @@ class User(me.Document):
     def get_user_votes(cls, user_id):
         """"""
         user_votes_queryset = cls.objects(id=user_id).first()
-        user_votes_dict_list = (json.loads(user_votes_queryset.to_json()))['votes']
-        
+        user_votes_dict_list = (json.loads(
+            user_votes_queryset.to_json()))['votes']
+
         for vote_obj in user_votes_dict_list:
             vote_obj['user_id'] = user_id
             vote_obj['request_id'] = vote_obj['$oid']
 
         return user_votes_dict_list
 
-
     meta = {
         'collection': 'users',
-        'indexes': [('name','email')],
+        'indexes': [('name', 'email')],
         'allow_inheritance': True
     }
-    
+
 
 class Artist(User):
     img_url = me.StringField(max_length=255)
