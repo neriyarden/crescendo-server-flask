@@ -131,6 +131,7 @@ class Event(me.Document):
         events_of_artist = cls.objects(artist_id=artist_id)
         events_dict = json.loads(events_of_artist.to_json())
         for event in events_dict:
+            # try without only and with User.get_artist_name
             event['artist'] = \
                 User.objects(id=event['artist_id']['$oid']).only('name').first()['name']
 

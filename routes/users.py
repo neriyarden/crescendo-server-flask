@@ -1,3 +1,4 @@
+from mongodb.models.requests import Request
 import os
 import json
 from flask import Blueprint, request, Response
@@ -48,8 +49,16 @@ def get_user(user_id):
     return Response(user_details.to_json(), 200, mimetype='application/json')
 
 
-# @Users.route('/users/<string:user_id>/votes', methods=['get'])
-# def get_user_votes(user_id):
-#     user_votes = User.get_user_votes(user_id)
-#     return Response(user_votes.to_json(), 200, mimetype='application/json')
+@Users.route('/users/<string:user_id>/votes', methods=['get'])
+def get_user_votes(user_id):
+    user_votes = User.get_user_votes(user_id)
+    for vote in user_votes:
+        request_json = Request.get_request_by_id(vote['request_id'])
+        request_dict = json.loads(request_json)
+        vote.update(request_dict)
+        # vote['artist_id'] = vote['artist_id']['$oid']
+        vote['artist'] = User.get_artist_name(vote['artist_id'])
+        del vote['$oid']
+
+    return Response(json.dumps(user_votes), 200, mimetype='application/json')
 

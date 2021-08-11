@@ -44,14 +44,27 @@ class Request(me.Document):
             request_artist = User.objects(id=request['artist_id']['$oid']).first()
             request['artist'] = request_artist['name']
             request['img_url'] = request_artist['img_url']
-            request['votes'] = User.objects(votes=request).count() #.to_json())
+            request['votes'] = User.objects(votes=request['id']).count()
 
         return requests_dicts_list
 
     @classmethod
+    def get_request_by_id(cls, request_id):
+        request_queryset = cls.objects(id=request_id).first()
+        request_dict = json.loads(request_queryset.to_json())
+        request_artist = User.objects(id=request_dict['artist_id']['$oid']).first()
+        request_dict['artist'] = request_artist['name']
+        request_dict['img_url'] = request_artist['img_url']
+        request_dict['request_id'] = request_dict['_id']['$oid']
+        del request_dict['_id']
+        del request_dict['requested_at']
+        request_dict['artist_id'] = request_dict['artist_id']['$oid']
+        request_dict['votes'] = User.objects(votes=request_dict['request_id']).count()
+        return json.dumps(request_dict)
+
+    @classmethod
     def cast_vote(cls, request_id, user_id):
-        request_queryset = Request.objects(id=request_id).first()
-        print('2', request_queryset)
+        request_queryset = cls.objects(id=request_id).first()
         user_queryset = User.objects(id=user_id)
         user_queryset.update_one(push__votes=request_queryset)
         return user_queryset
@@ -60,8 +73,3 @@ class Request(me.Document):
     meta = {
         'collection': 'requests',
     }
-
-
-        # request_queryset = cls.objects(id=request_id)
-        # request_queryset.update_one(push__votes=user)
-        # return request_queryset

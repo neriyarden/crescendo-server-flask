@@ -19,6 +19,13 @@ def get_requests():
     resp = Response(json.dumps(requests), status=200, mimetype='application/json')
     return resp
 
+
+@Requests.route('/requests/<string:request_id>', methods=['GET'])
+def get_request_by_id(request_id):
+    request = Request.get_request_by_id(request_id)
+    return Response(request, 200, mimetype='application/json')
+
+
 @Requests.route('/requests/<string:request_id>/vote/<string:user_id>', methods=['POST'])
 def cast_vote(request_id, user_id):
     updated_request = Request.cast_vote(request_id, user_id)

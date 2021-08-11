@@ -23,10 +23,7 @@ CLIENT_PATH = 'http://localhost:3000'
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
-# CORS(app, supports_credentials=True, resources={
-    # r'/api/*': {'origins': CLIENT_PATH}
-# })
-# app.config[]
+
 
 app.register_blueprint(Artists)
 app.register_blueprint(Users)

@@ -1,11 +1,9 @@
 import datetime
-from os import startfile
-from typing import Sequence
 
 import mongoengine as me
 import json
 
-from mongodb.utils import flatten_id_field, normalize_date_field
+from mongodb.utils import flatten_id_field
 
 class User(me.Document):
     # id = SequenceField()
@@ -38,12 +36,16 @@ class User(me.Document):
         return artists
 
     @classmethod
-    def get_artist_by_id(cls, id):
+    def get_artist_by_id(cls, artist_id):
         """"""
-        artist = cls.objects(id=id).first()
+        artist = cls.objects(id=artist_id).first()
         artist_dict = json.loads(artist.to_json())
         artist_dict['joined_at'] = artist.joined_at.isoformat()[:10]
         return flatten_id_field(artist_dict)
+
+    @classmethod
+    def get_artist_name(cls, artist_id):
+        return cls.objects(id=artist_id).first()['name']
 
     @classmethod
     def validate_user(cls, email, password):
@@ -60,8 +62,14 @@ class User(me.Document):
     @classmethod
     def get_user_votes(cls, user_id):
         """"""
-        user_votes = cls.objects(id=user_id).first().only('votes')
-        return user_votes
+        user_votes_queryset = cls.objects(id=user_id).first()
+        user_votes_dict_list = (json.loads(user_votes_queryset.to_json()))['votes']
+        
+        for vote_obj in user_votes_dict_list:
+            vote_obj['user_id'] = user_id
+            vote_obj['request_id'] = vote_obj['$oid']
+
+        return user_votes_dict_list
 
 
     meta = {
