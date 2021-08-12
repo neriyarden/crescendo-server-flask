@@ -30,6 +30,7 @@ class Request(me.Document):
     def get_requests(cls, size, page_num, artist, city):
         filters = {
             'city__icontains': city,
+            'deleted':False
         }
 
         if artist:
@@ -52,7 +53,7 @@ class Request(me.Document):
 
     @classmethod
     def get_request_by_id(cls, request_id):
-        request_queryset = cls.objects(id=request_id).first()
+        request_queryset = cls.objects(id=request_id, deleted=False).first()
         request_dict = json.loads(request_queryset.to_json())
         request_artist = User.objects(id=request_dict['artist_id']['$oid']).first()
         request_dict['artist'] = request_artist['name']
@@ -66,7 +67,7 @@ class Request(me.Document):
 
     @classmethod
     def get_requests_of_artist(cls, artist_id):
-        requests_of_artist = cls.objects(artist_id=artist_id)
+        requests_of_artist = cls.objects(artist_id=artist_id, deleted=False)
         requests_dict_list = json.loads(requests_of_artist.to_json())
         for request in requests_dict_list:
             request = flatten_id_field(request)
@@ -81,7 +82,7 @@ class Request(me.Document):
 
     @classmethod
     def cast_vote(cls, request_id, user_id):
-        request_queryset = cls.objects(id=request_id).first()
+        request_queryset = cls.objects(id=request_id, deleted=False).first()
         user_queryset = User.objects(id=user_id)
         user_queryset.update_one(push__votes=request_queryset)
         return user_queryset
