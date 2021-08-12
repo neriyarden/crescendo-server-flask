@@ -31,11 +31,11 @@ def get_event_by_id(event_id):
     return resp
 
 
-# get artist data by id
-# @Events.route('/events/<string:artist_id>', methods=['GET'])
-# def get_artist(artist_id):
-#     artist = User.get_artist_by_id(artist_id)
-#     return artist.to_json()
+@Events.route('/events/<string:event_id>', methods=['DELETE'])
+def delete_event(event_id):
+    deleted_event = Event.delete_event(event_id)
+    resp = Response(deleted_event, status=200, mimetype='application/json')
+    return resp
 
 
 # finish this

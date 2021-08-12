@@ -94,8 +94,9 @@ class User(me.Document):
     def get_user_votes(cls, user_id):
         """"""
         user_votes_queryset = cls.objects(id=user_id).first()
-        user_votes_dict_list = (json.loads(
-            user_votes_queryset.to_json()))['votes']
+        user_votes_dict_list = (
+            json.loads(user_votes_queryset.to_json())
+            )['votes']
 
         for vote_obj in user_votes_dict_list:
             vote_obj['user_id'] = user_id

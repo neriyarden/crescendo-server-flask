@@ -71,10 +71,18 @@ class Event(me.Document):
         return event
 
     @classmethod
+    def delete_event(cls, event_id):
+        print('--> event_id:', event_id)
+        print('-->', cls.objects(id=event_id))
+        event_queryset = cls.objects(id=event_id).update_one(set__deleted=True)
+        return json.dumps({ 'eventId': event_id })
+
+    @classmethod
     def get_future_events(cls, size, page_num, artist, city, when, tags):
         # until_when = get_date_filter(when)
         filters = {
             'city__icontains': city,
+            'deleted': False
             # 'date__gte': datetime.datetime.now(),
             # 'date__lte': until_when
         }
@@ -87,7 +95,7 @@ class Event(me.Document):
         if tags:
             filters['tags__all'] = User.objects(votes__in=tags)
 
-        featured_event = cls.objects(featured=True).first()
+        featured_event = cls.objects(featured=True, deleted=False).first()
         events_queryset = cls.objects(**filters)[(page_num - 1) * size:page_num * size]
         events_dicts_list = json.loads(events_queryset.to_json())
         events_dicts_list_results = []
@@ -107,7 +115,7 @@ class Event(me.Document):
 
     @classmethod
     def get_past_events(cls):
-        events_queryset = cls.objects()
+        events_queryset = cls.objects(deleted=False)
         events_dicts_list = json.loads(events_queryset.to_json())
         past_events = []
         for event in events_dicts_list:
@@ -119,7 +127,7 @@ class Event(me.Document):
 
     @classmethod
     def get_event_by_id(cls, event_id):
-        event = cls.objects(id=event_id).first()
+        event = cls.objects(id=event_id, deleted=False).first()
         event_dict = json.loads(event.to_json())
         event_dict['artist'] = \
             User.objects(id=event_dict['artist_id']['$oid']) \
@@ -129,14 +137,19 @@ class Event(me.Document):
 
     @classmethod
     def get_events_of_artist(cls, artist_id):
-        events_of_artist = cls.objects(artist_id=artist_id)
-        events_dict = json.loads(events_of_artist.to_json())
-        for event in events_dict:
-            # try without only and with User.get_artist_name
+        events_of_artist = cls.objects(artist_id=artist_id, deleted=False)
+        events_dict_list = json.loads(events_of_artist.to_json())
+        for event in events_dict_list:
+            event = flatten_id_field(event)
             event['artist'] = \
-                User.objects(id=event['artist_id']['$oid']).only('name').first()['name']
+                User.objects(id=event['artist_id']['$oid']).first()['name']
+            event['artist_id'] = event['artist_id']['$oid']
+            for tag in event['tags']:
+                tag['tag_id'] = tag['$oid']
+                tag['tag_name'] = Tag.objects(id=tag['tag_id']).first()['name']
+                del tag['$oid']
 
-        return events_dict
+        return events_dict_list
 
     meta = {
         'collection': 'events',
